@@ -1,6 +1,6 @@
 package com.baijiazm.tjblog.service.impl;
 
-import com.baijiazm.tjblog.entity.LogEntity;
+import com.baijiazm.tjblog.model.entity.LogEntity;
 import com.baijiazm.tjblog.mapper.LogMapper;
 import com.baijiazm.tjblog.service.ILogService;
 import com.baijiazm.tjblog.utils.DateKit;

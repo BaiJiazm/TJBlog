@@ -1,6 +1,6 @@
 package com.baijiazm.tjblog.service.impl;
 
-import com.baijiazm.tjblog.entity.UserEntity;
+import com.baijiazm.tjblog.model.entity.UserEntity;
 import com.baijiazm.tjblog.exception.TipException;
 import com.baijiazm.tjblog.mapper.UserMapper;
 import com.baijiazm.tjblog.service.IUserService;

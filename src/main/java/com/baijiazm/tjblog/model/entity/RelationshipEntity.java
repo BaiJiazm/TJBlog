@@ -1,4 +1,4 @@
-package com.baijiazm.tjblog.entity;
+package com.baijiazm.tjblog.model.entity;
 
 import java.io.Serializable;
 

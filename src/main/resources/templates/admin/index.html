@@ -1,60 +1,12 @@
 <!DOCTYPE html>
 
-<html lang="en">
-
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>数据转发中心</title>
-
-    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css"/>
-    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='TJBlog管理员主页'">
+<header th:replace="admin/header::headerFragment(${title})"></header>
 
 <body>
 <div class="container-fluid">
 
-    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Project name</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                    <li><a href="#shop"><span class="glyphicon glyphicon-shopping-cart"></span> Shop</a></li>
-                    <li><a href="#support"><span class="glyphicon glyphicon-headphones"></span> Support</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right pull-right">
-                    <li class="dropdown">
-                        <a th:href="@{index.html}" class="dropdown-toggle profile" data-toggle="dropdown"
-                           aria-expanded="true"><img th:src="${commons.gravatar(session.login_user.email)}"
-                                                     alt="user-img"/> </a>
-                        <ul class="dropdown-menu">
-                            <li><a th:href="@{${commons.site_url()}}" target="_blank"><i class="fa fa-eye"
-                                                                                         aria-hidden="true"></i>
-                                查看网站</a></li>
-                            <li><a th:href="@{/admin/profile}"><i class="fa fa-sun-o"></i> 个人设置</a></li>
-                            <li><a th:href="@{/admin/logout}"><i class="fa fa-sign-out"></i> 注销</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div style="height: 100px;">
-    </div>
+    <div th:replace="admin/header::headerBody('Admin', 'isLogin')"></div>
 
     <div class="container-fluid">
         <div class="row">
@@ -109,7 +61,7 @@
                                     </div>
                                     <div class="panel-body text-right" style="font-size: 16px">
                                         <p>发表了</p>
-                                        <p class="text-info">123</p>
+                                        <p class="text-info" th:text="${statistics.articles}">articles</p>
                                         <p>篇文章</p>
                                     </div>
                                 </div>
@@ -122,7 +74,7 @@
                                     </div>
                                     <div class="panel-body text-right" style="font-size: 16px">
                                         <p>收到了</p>
-                                        <p class="text-info">123</p>
+                                        <p class="text-info" th:text="${statistics.comments}">comments</p>
                                         <p>条留言</p>
                                     </div>
                                 </div>
@@ -135,7 +87,7 @@
                                     </div>
                                     <div class="panel-body text-right" style="font-size: 16px">
                                         <p>上传了</p>
-                                        <p class="text-info">123</p>
+                                        <p class="text-info" th:text="${statistics.attachs}">attachs</p>
                                         <p>个附件</p>
                                     </div>
                                 </div>
@@ -148,7 +100,7 @@
                                     </div>
                                     <div class="panel-body text-right" style="font-size: 16px">
                                         <p>友链了</p>
-                                        <p class="text-info">123</p>
+                                        <p class="text-info" th:text="${statistics.links}">links</p>
                                         <p>个好友</p>
                                     </div>
                                 </div>
@@ -163,11 +115,13 @@
                                     </div>
                                     <div class="panel-body">
                                         <ul class="list-group">
-                                            <li class="list-group-item">
-                                    <span class="badge badge-primary" title="1条评论">
-                                        1
-                                    </span>
-                                                <a href="#">文章标题</a>
+                                            <li class="list-group-item" th:each="article : ${articles}">
+                                            <span class=" badge badge-primary "
+                                                  th:title="${article.commentsNumber}+'条评论'"
+                                                  th:text="${article.commentsNumber}">articleCommentsNumber</span>
+                                                <a target="_blank"
+                                                   th:href="${commons.site_url('/article/')}+ ${article.id}"
+                                                   th:text="${article.title}">文章标题</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -179,18 +133,27 @@
                                         <h4 class="panel-title">最新留言</h4>
                                     </div>
                                     <div class="panel-body">
-                                        <div>
+                                        <div th:if="${comments}==null or ${#lists.size(comments)}==0">
                                             <div class="alert alert-warning">
                                                 还没有收到留言
                                             </div>
                                         </div>
-                                        <ul class="list-group">
-                                            <li class="list-group-item">
-                                                <div>
-                                                    <a href="#">commentAuthor</a>
+                                        <ul class="list-group"
+                                            th:unless="${comments}==null and ${#lists.size(comments)}==0">
+                                            <li class="list-group-item" th:each="comment : ${comments}">
+                                                <div th:if="${comment.url}!=null and ${comment.url}!=''">
+                                                    <a href="${comment.url}" target="_blank"
+                                                       th:text="${comment.author}">commentAuthor</a>
                                                 </div>
-                                                <block>于MM月DD日HH:mm ：</block>
-                                                <block><a href="#">commentContent</a></block>
+                                                <th:block th:unless="${comment.url}!=null and ${comment.url}!=''"
+                                                          th:text="${comment.author}"/>
+                                                于
+                                                <th:block th:text="${commons.fmtdate(comment.created,'MM月dd日HH:mm')}"/>
+                                                ：<a
+                                                    th:href="${commons.site_url('/article/')}+${comment.id}+'#comments'"
+                                                    target="_blank" th:utext="${commons.article(comment.content)}"></a>
+                                                <!--<block>于MM月DD日HH:mm ：</block>-->
+                                                <!--<block><a href="#">commentContent</a></block>-->
                                             </li>
                                         </ul>
                                     </div>
@@ -203,8 +166,8 @@
                                     </div>
                                     <div class="panel-body">
                                         <ul class="list-group">
-                                            <li class="list-group-item">
-                                                <span>2018-03-03 11:04:00 :> 登录后台</span>
+                                            <li class="list-group-item" th:each="log :${logs}">
+                                                <span th:text="${commons.fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} +' : '+ ${log.action}">2018-03-03 11:04:00 : 登录后台</span>
                                             </li>
                                         </ul>
                                     </div>

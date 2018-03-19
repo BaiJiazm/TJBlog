@@ -1,9 +1,9 @@
 package com.baijiazm.tjblog.controller.admin;
 
 import com.baijiazm.tjblog.controller.BaseController;
-import com.baijiazm.tjblog.entity.UserEntity;
-import com.baijiazm.tjblog.entity.dto.LogAction;
+import com.baijiazm.tjblog.dto.LogAction;
 import com.baijiazm.tjblog.exception.TipException;
+import com.baijiazm.tjblog.model.entity.UserEntity;
 import com.baijiazm.tjblog.service.ILogService;
 import com.baijiazm.tjblog.service.IUserService;
 import com.baijiazm.tjblog.utils.MyUtils;
@@ -37,7 +37,7 @@ public class LogInOutController extends BaseController {
 
     @GetMapping(value = "/login")
     public String login() {
-        return "/admin/login";
+        return "admin/login";
     }
 
     @PostMapping(value = "/login")
@@ -73,8 +73,9 @@ public class LogInOutController extends BaseController {
             }
             modelMap.addAttribute("info", info);
             modelMap.addAttribute("backLink", "login");
-            return "/common/hintInfo";
+            return "admin/hintInfo";
         }
-        return "/admin/index";
+        modelMap.addAttribute("userName", userName);
+        return "redirect:index.html";
     }
 }

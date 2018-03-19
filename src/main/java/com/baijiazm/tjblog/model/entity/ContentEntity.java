@@ -1,4 +1,4 @@
-package com.baijiazm.tjblog.entity;
+package com.baijiazm.tjblog.model.entity;
 
 import java.io.Serializable;
 
@@ -87,11 +87,11 @@ public class ContentEntity implements Serializable {
     private Boolean allowFeed;
 
 
-    public Integer getid() {
+    public Integer getId() {
         return id;
     }
 
-    public void setid(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

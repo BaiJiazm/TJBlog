@@ -1,6 +1,6 @@
 package com.baijiazm.tjblog.service;
 
-import com.baijiazm.tjblog.entity.UserEntity;
+import com.baijiazm.tjblog.model.entity.UserEntity;
 
 public interface IUserService {
 

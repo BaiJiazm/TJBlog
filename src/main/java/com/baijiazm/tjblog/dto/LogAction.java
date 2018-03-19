@@ -1,4 +1,4 @@
-package com.baijiazm.tjblog.entity.dto;
+package com.baijiazm.tjblog.dto;
 
 public enum LogAction {
 

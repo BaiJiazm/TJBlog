@@ -67,4 +67,19 @@ public class MapCache {
         CacheObject cacheObject = new CacheObject(key, value, expired);
         cachePool.put(key, cacheObject);
     }
+
+    /**
+     * 设置一个hash缓存并带过期时间
+     *
+     * @param key     缓存key
+     * @param field   缓存field
+     * @param value   缓存value
+     * @param expired 过期时间，单位为秒
+     */
+    public void hset(String key, String field, Object value, long expired) {
+        key = key + ":" + field;
+        expired = expired > 0 ? System.currentTimeMillis() / 1000 + expired : expired;
+        CacheObject cacheObject = new CacheObject(key, value, expired);
+        cachePool.put(key, cacheObject);
+    }
 }

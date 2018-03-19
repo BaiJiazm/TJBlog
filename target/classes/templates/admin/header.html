@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerFragment(title)">
+
+    <meta charset="UTF-8"/>
+    <title>
+        <th:block th:text="${title!=null?title:'TJBlog'}">TJBlog</th:block>
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css"/>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+<div th:fragment="headerBody(active, loginStatus)">
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand active" href="#">TJBlog</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li th:class="${active}=='Home' ? 'active' : ''"><a href="@{/admin/index}"><span
+                            class="glyphicon glyphicon-home"></span> Home</a></li>
+                    <li th:class="${active}=='Admin' ? 'active' : ''"><a href="@{/admin/index}"><span
+                            class="glyphicon glyphicon-user"></span> Admin</a></li>
+                    <li th:class="${active}=='Support' ? 'active' : ''"><a href="@{/admin/support}"><span
+                            class="glyphicon glyphicon-headphones"></span> Support</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right pull-right">
+                    <li class="dropdown" th:if="${loginStatus}=='notLogin'">
+                        <a href="#" class="dropdown-toggle profile" data-toggle="dropdown"
+                           aria-expanded="true"> 用户</a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{admin/index}"><i class="fa fa-eye" aria-hidden="true"></i>
+                                查看网站</a></li>
+                            <li><a th:href="@{/admin/profile}"><i class="fa fa-sun-o"></i> 登录</a></li>
+                            <li><a th:href="@{/admin/logout}"><i class="fa fa-sign-out"></i> 注册</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" th:if="${loginStatus}=='isLogin'">
+                        <a href="#" class="dropdown-toggle profile" data-toggle="dropdown"
+                           aria-expanded="true" th:text="${userName}"> userName</a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{admin/index}"><i class="fa fa-eye" aria-hidden="true"></i>
+                                查看网站</a></li>
+                            <li><a th:href="@{/admin/profile}"><i class="fa fa-sun-o"></i> 个人设置</a></li>
+                            <li><a th:href="@{/admin/logout}"><i class="fa fa-sign-out"></i> 注销</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 100px;">
+    </div>
+</div>
+</body>
+</html>

@@ -4,11 +4,8 @@ import com.baijiazm.tjblog.mapper.OptionMapper;
 import com.baijiazm.tjblog.mapper.UserMapper;
 import com.baijiazm.tjblog.model.entity.OptionEntity;
 import com.baijiazm.tjblog.model.entity.UserEntity;
-import com.baijiazm.tjblog.utils.Commons;
-import com.baijiazm.tjblog.utils.MyUtils;
-import com.baijiazm.tjblog.utils.UUID;
+import com.baijiazm.tjblog.utils.*;
 import com.baijiazm.tjblog.webConst.WebConst;
-import com.baijiazm.tjblog.utils.MapCache;
 import com.baijiazm.tjblog.dto.Types;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -34,6 +31,9 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     @Resource
     private Commons commons;
+
+    @Resource
+    private AdminCommons adminCommons;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -73,7 +73,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         OptionEntity optionEntity = optionMapper.selectOptionByName("site_record");
         httpServletRequest.setAttribute("commons", commons);//一些工具类和公共方法
         httpServletRequest.setAttribute("option", optionEntity);
-//        httpServletRequest.setAttribute("adminCommons", adminCommons);
+        httpServletRequest.setAttribute("adminCommons", adminCommons);
     }
 
     @Override

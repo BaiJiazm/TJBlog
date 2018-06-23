@@ -10,40 +10,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Panel heading</div>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-dashboard" aria-hidden="true"></i><span> 仪表盘 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-file-text" aria-hidden="true"></i><span> 页面管理 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-comments" aria-hidden="true"></i><span> 评论管理 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-link" aria-hidden="true"></i><span> 友链管理 </span></a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a hrep="#"><i class="fa fa-gear" aria-hidden="true"></i><span> 系统设置 </span></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <div th:replace="admin/header::headerMenu"></div>
 
             <div class="col-md-10">
                 <div class="container-fluid">

@@ -1,10 +1,7 @@
 package com.baijiazm.tjblog.mapper;
 
 import com.baijiazm.tjblog.model.entity.UserEntity;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -54,4 +51,18 @@ public interface UserMapper {
     List<UserEntity> getAllUsersByNamePassword(@Param("userName") String userName,
                                                @Param("password") String password);
 
+
+    String updateScreenNameEmailByUid = "update t_user set `screen_name`=#{screenName}, `email`=#{email} " +
+            " where id=#{id}";
+
+    @Update(updateScreenNameEmailByUid)
+    void updateScreenNameEmailByUid(@Param("screenName") String screenName,
+                                    @Param("email") String email,
+                                    @Param("id") int id);
+
+
+    String updatePassWordByUid = "update t_user set `password`=#{user.password} where id=#{user.id}";
+
+    @Update(updatePassWordByUid)
+    void updatePassWordByUid(@Param("user") UserEntity user);
 }

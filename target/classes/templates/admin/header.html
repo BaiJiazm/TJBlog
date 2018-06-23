@@ -31,31 +31,32 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li th:class="${active}=='Home' ? 'active' : ''"><a href="@{/admin/index}"><span
+                    <li th:class="${active}=='Home' ? 'active' : ''"><a th:href="@{/}"><span
                             class="glyphicon glyphicon-home"></span> Home</a></li>
-                    <li th:class="${active}=='Admin' ? 'active' : ''"><a href="@{/admin/index}"><span
-                            class="glyphicon glyphicon-user"></span> Admin</a></li>
-                    <li th:class="${active}=='Support' ? 'active' : ''"><a href="@{/admin/support}"><span
-                            class="glyphicon glyphicon-headphones"></span> Support</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right pull-right">
-                    <li class="dropdown" th:if="${loginStatus}=='notLogin'">
+                    <!--<li th:class="${active}=='Admin' ? 'active' : ''"><a th:href="@{/admin/index}"><span-->
+                    <!--class="glyphicon glyphicon-user"></span> Admin</a>-->
+                    <!--<ul class="nav navbar-nav navbar-right pull-right">-->
+                    <!--</ul>-->
+                    <!--</li>-->
+                    <li th:class="${active}=='Admin' ? 'active dropdown ' : ' dropdown'"
+                        th:if="${loginStatus}=='notLogin'">
                         <a href="#" class="dropdown-toggle profile" data-toggle="dropdown"
-                           aria-expanded="true"> 用户</a>
+                           aria-expanded="true"> Admin</a>
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{admin/index}"><i class="fa fa-eye" aria-hidden="true"></i>
+                            <li><a th:href="@{/}"><i class="fa fa-eye" aria-hidden="true"></i>
                                 查看网站</a></li>
-                            <li><a th:href="@{/admin/profile}"><i class="fa fa-sun-o"></i> 登录</a></li>
-                            <li><a th:href="@{/admin/logout}"><i class="fa fa-sign-out"></i> 注册</a></li>
+                            <li><a th:href="@{/admin/login}"><i class="fa fa-sun-o"></i> 登录</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown" th:if="${loginStatus}=='isLogin'">
+                    <li th:class="${active}=='Admin' ? 'active dropdown' : 'dropdown'"
+                        th:if="${loginStatus}=='isLogin'">
                         <a href="#" class="dropdown-toggle profile" data-toggle="dropdown"
-                           aria-expanded="true" th:text="${userName}"> userName</a>
+                           aria-expanded="true">Admin</a>
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{admin/index}"><i class="fa fa-eye" aria-hidden="true"></i>
+                            <li><a th:href="@{/admin/index}"><i class="fa fa-eye" aria-hidden="true"></i>
                                 查看网站</a></li>
                             <li><a th:href="@{/admin/profile}"><i class="fa fa-sun-o"></i> 个人设置</a></li>
+                            <li><a th:href="@{/admin/password}"><i class="fa fa-chevron-circle-up"></i> 修改密码</a></li>
                             <li><a th:href="@{/admin/logout}"><i class="fa fa-sign-out"></i> 注销</a></li>
                         </ul>
                     </li>
@@ -67,5 +68,41 @@
     <div style="height: 100px;">
     </div>
 </div>
+
+<div th:fragment="headerMenu" class="col-md-2">
+    <div class="panel panel-info">
+        <div class="panel-heading">功能列表</div>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-success">
+                <a th:href="@{/admin/index}"><i class="fa fa-dashboard" aria-hidden="true"></i><span> 站点信息 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a th:href="@{/admin/article/publish}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a th:href="@{/admin/article}"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a hrep="#"><i class="fa fa-file-text" aria-hidden="true"></i><span> 页面管理 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a hrep="#"><i class="fa fa-comments" aria-hidden="true"></i><span> 评论管理 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a hrep="#"><i class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a hrep="#"><i class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a hrep="#"><i class="fa fa-link" aria-hidden="true"></i><span> 友链管理 </span></a>
+            </li>
+            <li class="list-group-item list-group-item-success">
+                <a hrep="#"><i class="fa fa-gear" aria-hidden="true"></i><span> 系统设置 </span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 </body>
 </html>

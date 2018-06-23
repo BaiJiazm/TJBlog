@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='TJBlog发布文章'">
+<header th:replace="admin/header::headerFragment(${title})"></header>
+
+<!--<link rel="stylesheet" type="text/css" href="/css/htmleaf-demo.css"/>-->
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-markdown.min.css"/>
+<script type="text/javascript" src="/js/bootstrap-markdown.js"></script>
+<script type="text/javascript" src="/locale/bootstrap-markdown.zh.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#content").markdown({language: 'zh'})
+    })
+</script>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+
+<script type="text/javascript">
+    $(window).on('load', function () {
+        $('#multi-sel').selectpicker({
+            'selectedText': 'cat'
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    function subArticle(status) {
+        var form = document.getElementById("articleForm");
+        var title = form.title.value;
+        var content = form.content.value;
+        var id = form.id.value;
+        if (title == null || title == "") {
+            alert('请输入文章标题');
+            form.title.focus();
+            return false;
+        }
+        if (content == null || content == "") {
+            alert('请输入文章内容');
+            form.content.focus();
+            return false;
+        }
+        $("#articleForm #status").val(status);
+        var url = id == null || id == "" ? '/admin/article/publish' : '/admin/article/modify';
+        form.action = url;
+        form.method = "post";
+        form.submit();
+        return true;
+    }
+</script>
+
+<body>
+<div class="container-fluid">
+
+    <div th:replace="admin/header::headerBody('Admin', 'isLogin')"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div th:replace="admin/header::headerMenu"></div>
+
+            <div class="col-md-10">
+                <div class="container-fluid">
+                    <div class="col-md-12">
+                        <h4 class="page-title">
+                            <th:block th:if="${null != contents}">
+                                编辑文章
+                            </th:block>
+                            <th:block th:unless="${null != contents}">
+                                发布文章
+                            </th:block>
+                        </h4>
+                    </div>
+
+                    <div class="col-md-12">
+                        <form id="articleForm" role="form" novalidate="novalidate">
+                            <input type="hidden" name="id" id="id"
+                                   th:value="${contents!=null and contents.id!=null}?${contents.id}:''"/>
+                            <input type="hidden" name="status" id="status"
+                                   th:value="${contents!=null and contents.status!=null}?${contents.status}:'publish'"/>
+
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" placeholder="请输入文章标题（必须）" name="title"
+                                       id="title"
+                                       required="required" aria-required="true"
+                                       th:value="${contents!=null and contents.title!=null}?${contents.title}:''"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control"
+                                       placeholder="自定义访问路径，如：my-first-article  默认为文章id" name="slug"
+                                       th:value="${contents!=null and contents.slug!=null}?${contents.slug}:''"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" placeholder="请填写文章标签" name="tags"
+                                       th:value="${contents!=null and contents.tags!=null}?${contents.tags}:''"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select id="multiple-sel" name="categories"
+                                        class="selectpicker show-tick form-control" multiple="multiple"
+                                        data-live-search="true">
+                                    <th:block th:if="${null==categories}">
+                                        <option value="default" selected="selected">default</option>
+                                    </th:block>
+                                    <th:block th:if="${null!=categories}">
+                                        <th:block th:each="c:${categories}">
+                                            <option th:value="${c.name}" th:text="${c.name}"
+                                                    th:selected="${null!=contents and adminCommons.exist_cat(c, contents.categories)}?true:false"></option>
+                                        </th:block>
+                                    </th:block>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                    <label class="checkbox-inline">开启评论</label>
+                                    <input type="checkbox" id="allowComment" name="allowComment"
+                                           th:checked="${contents!=null and contents.allowComment!=null}?${contents.allowComment}:'true'"
+                                           th:value="${contents!=null and contents.allowComment!=null}?${contents.allowComment}:'true'"
+                                    />
+                                    <label class="checkbox-inline">允许Ping</label>
+                                    <input type="checkbox" id="allowPing" name="allowPing"
+                                           th:checked="${contents!=null and contents.allowPing!=null}?${contents.allowPing}:'true'"
+                                           th:value="${contents!=null and contents.allowPing!=null}?${contents.allowPing}:'true'"
+                                    />
+                                    <label class="checkbox-inline">允许订阅</label>
+                                    <input type="checkbox" id="allowFeed" name="allowFeed"
+                                           th:checked="${contents!=null and contents.allowFeed!=null}?${contents.allowFeed}:'true'"
+                                           th:value="${contents!=null and contents.allowFeed!=null}?${contents.allowFeed}:'true'"
+                                    />
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <button type="button" class="btn btn-primary" onclick="subArticle('publish')">
+                                        保存文章
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="subArticle('draft')">
+                                        存为草稿
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="container-fluid">
+                                    <textarea id="content" autocomplete="off" name="content" rows="30"
+                                              th:utext="${contents!=null and contents.content!=null}?${contents.content}:''"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

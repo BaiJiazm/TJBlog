@@ -1,8 +1,13 @@
 package com.baijiazm.tjblog.mapper;
 
+import com.baijiazm.tjblog.model.entity.MetaEntity;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 //-- 元信息表
 //        DROP TABLE IF EXISTS `t_meta`;
@@ -21,8 +26,38 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface MetaMapper {
-    String countByType = "select count(*) from t_meta where type=#{type}";
 
-    @Select(countByType)
-    Long countByType(@Param("type") String type);
+    String selectCountByType = "select count(*) from t_meta where type=#{type}";
+
+    @Select(selectCountByType)
+    Long selectCountByType(@Param("type") String type);
+
+    String getMetasByType = "select * from t_meta where type=#{type}";
+
+    @Select(getMetasByType)
+    List<MetaEntity> getMetasByType(@Param("type") String type);
+
+
+    String getMetasByTypeOrder = "select * from t_meta where type=#{type} order by #{order}";
+
+    @Select(getMetasByTypeOrder)
+    List<MetaEntity> getMetasByTypeOrder(@Param("type") String type,
+                                         @Param("order") String order);
+    
+
+    String selectMetasByNameType = "select * from t_meta where name=#{name} and type=#{type}";
+
+    @Select(selectMetasByNameType)
+    List<MetaEntity> selectMetasByNameType(@Param("name") String name,
+                                           @Param("type") String type);
+
+    String insertOneMeta = "insert into t_meta ( " +
+            " `id`, `name`, `slug`, `type`, `description`, `sort`, `parent`) " +
+            " values (" +
+            " #{meta.id}, #{meta.name}, #{meta.slug}, #{meta.type}, #{meta.description}, #{meta.sort}, #{meta.parent} " +
+            " ) ";
+
+    @Insert(insertOneMeta)
+    @Options(useGeneratedKeys = true, keyProperty = "meta.id")
+    void insertOneMeta(@Param("meta") MetaEntity meta);
 }

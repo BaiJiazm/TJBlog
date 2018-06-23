@@ -22,15 +22,15 @@ public class SiteServiceImpl implements ISiteService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SiteServiceImpl.class);
 
-    CommentMapper commentMapper;
+    private CommentMapper commentMapper;
 
-    ContentMapper contentMapper;
+    private ContentMapper contentMapper;
 
-    AttachMapper attachMapper;
+    private AttachMapper attachMapper;
 
-    MetaMapper metaMapper;
+    private MetaMapper metaMapper;
 
-    LogMapper logMapper;
+    private LogMapper logMapper;
 
     @Autowired
     SiteServiceImpl(CommentMapper commentMapper, ContentMapper contentMapper,
@@ -60,7 +60,8 @@ public class SiteServiceImpl implements ISiteService {
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        List<ContentEntity> contentEntityList = contentMapper.selectContentsOrderByCreatedDesc(0, limit);
+        List<ContentEntity> contentEntityList = contentMapper.selectContentsByTypeOrderLimitBegin1(
+                Types.ARTICLE.getType(), "created desc", 0, limit);
         LOGGER.debug("Exit getRecentContents method");
         return contentEntityList;
     }
@@ -71,10 +72,10 @@ public class SiteServiceImpl implements ISiteService {
         int authorid = 1;
         int ownerId = 1;
         StatisticsVO statisticsVO = new StatisticsVO();
-        Long articles = contentMapper.countByType(Types.ARTICLE.getType());
+        Long articles = contentMapper.selectCountByType(Types.ARTICLE.getType());
         Long comments = commentMapper.countByOwnerId(ownerId);
         Long attaches = attachMapper.getCountByAuthor(authorid);
-        Long links = metaMapper.countByType(Types.LINK.getType());
+        Long links = metaMapper.selectCountByType(Types.LINK.getType());
 
         statisticsVO.setArticles(articles);
         statisticsVO.setComments(comments);

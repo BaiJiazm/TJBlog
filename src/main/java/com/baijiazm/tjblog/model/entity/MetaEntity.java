@@ -17,7 +17,7 @@ public class MetaEntity implements Serializable {
     private String name;
 
     /**
-     * 缩略名
+     * 缩略名-访问路径
      */
     private String slug;
 
@@ -41,11 +41,11 @@ public class MetaEntity implements Serializable {
      */
     private Integer parent;
 
-    public Integer getid() {
+    public Integer getId() {
         return id;
     }
 
-    public void setid(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

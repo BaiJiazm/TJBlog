@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import sun.rmi.server.InactiveGroupException;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements IUserService {
         if (userCount <= 0) {
             throw new TipException("不存在的用户");
         }
-        String enPassword = MyUtils.MD5Encode(userName + password);
+        String enPassword = MyUtils.MD5encode(userName + password);
         List<UserEntity> userList = userMapper.getAllUsersByNamePassword(userName, enPassword);
         if (userList.isEmpty()) {
             throw new TipException("用户名或密码错误");
@@ -45,4 +46,13 @@ public class UserServiceImpl implements IUserService {
         return userList.get(0);
     }
 
+    @Override
+    public void updateScreenNameEmailByUid(String screenName, String email, Integer id) {
+        userMapper.updateScreenNameEmailByUid(screenName, email, id);
+    }
+
+    @Override
+    public void updatePassWordByUid(UserEntity user){
+        userMapper.updatePassWordByUid(user);
+    }
 }

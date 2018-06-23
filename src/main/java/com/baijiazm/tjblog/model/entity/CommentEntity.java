@@ -82,11 +82,11 @@ public class CommentEntity implements Serializable {
         this.id = id;
     }
 
-    public Integer getcontentId() {
+    public Integer getContentId() {
         return contentId;
     }
 
-    public void setcontentId(Integer contentId) {
+    public void setContentId(Integer contentId) {
         this.contentId = contentId;
     }
 

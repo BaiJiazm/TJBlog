@@ -1,7 +1,7 @@
 package com.baijiazm.tjblog.controller.admin;
 
 import com.baijiazm.tjblog.controller.BaseController;
-import com.baijiazm.tjblog.dto.LogAction;
+import com.baijiazm.tjblog.dto.LogActions;
 import com.baijiazm.tjblog.exception.TipException;
 import com.baijiazm.tjblog.model.entity.UserEntity;
 import com.baijiazm.tjblog.service.ILogService;
@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/admin")
@@ -55,7 +58,7 @@ public class LogInOutController extends BaseController {
             if (StringUtils.isNotBlank(remember)) {
                 MyUtils.setCookie(response, userEntity.getId());
             }
-            logService.insertLog(LogAction.LOGIN.getAction(), null,
+            logService.insertLog(LogActions.LOGIN.getAction(), null,
                     request.getRemoteAddr(), userEntity.getId());
         } catch (Exception e) {
             errorCount = null == errorCount ? 1 : errorCount + 1;
@@ -73,9 +76,32 @@ public class LogInOutController extends BaseController {
             }
             modelMap.addAttribute("info", info);
             modelMap.addAttribute("backLink", "login");
-            return "admin/hintInfo";
+            return "admin/hintPage";
         }
         modelMap.addAttribute("userName", userName);
         return "redirect:index.html";
+    }
+
+    /**
+     * 注销
+     *
+     * @param session
+     * @param response
+     */
+    @RequestMapping("/logout")
+    public void logout(HttpSession session, HttpServletResponse response,
+                       org.apache.catalina.servlet4preview.http.HttpServletRequest request) {
+        session.removeAttribute(WebConst.LOGIN_SESSION_KEY);
+        Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, "");
+        cookie.setValue(null);
+        cookie.setMaxAge(0);// 立即销毁cookie
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        try {
+            response.sendRedirect("/admin/login");
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.error("注销失败", e);
+        }
     }
 }

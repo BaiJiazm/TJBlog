@@ -1,6 +1,6 @@
 package com.baijiazm.tjblog.dto;
 
-public enum LogAction {
+public enum LogActions {
 
     LOGIN("登录后台"),
     UP_PWD("修改密码"),
@@ -21,7 +21,7 @@ public enum LogAction {
         this.action = action;
     }
 
-    LogAction(String action) {
+    LogActions(String action) {
         this.action = action;
     }
 }

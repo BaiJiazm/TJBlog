@@ -123,33 +123,44 @@ public interface ContentMapper {
 
     String deleteByPrimaryKey = "delete from t_content where id=#{cid}";
 
-    @Select(deleteByPrimaryKey)
+    @Delete(deleteByPrimaryKey)
     void deleteByPrimaryKey(@Param("cid") Integer cid);
 
 
-    long countByExample(ContentEntity example);
+    String updateCommentsNumberById = "update t_content set `comments_number`=#{content.commentsNumber} " +
+            " where id=#{content.id}";
 
-    int deleteByExample(ContentEntity example);
+    @Update(updateCommentsNumberById)
+    int updateCommentsNumberById(@Param("content") ContentEntity content);
 
-    int insert(ContentEntity record);
 
-    int insertSelective(ContentEntity record);
+    String updateHitsById = "update t_content set `hits`=#{content.hits} " +
+            " where id=#{content.id}";
 
-    List<ContentEntity> selectByExampleWithBLOBs(ContentEntity example);
+    @Update(updateHitsById)
+    int updateHitsById(@Param("content") ContentEntity content);
 
-    List<ContentEntity> selectByExample(ContentEntity example);
-
-    int updateByExampleSelective(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
-
-    int updateByExampleWithBLOBs(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
-
-    int updateByExample(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
-
-    int updateByPrimaryKeySelective(ContentEntity record);
-
-    int updateByPrimaryKeyWithBLOBs(ContentEntity record);
+//    long countByExample(ContentEntity example);
+//
+//    int deleteByExample(ContentEntity example);
+//
+//    int insert(ContentEntity record);
+//
+//    int insertSelective(ContentEntity record);
+//
+//    List<ContentEntity> selectByExampleWithBLOBs(ContentEntity example);
+//
+//    List<ContentEntity> selectByExample(ContentEntity example);
+//
+//    int updateByExampleSelective(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
+//
+//    int updateByExampleWithBLOBs(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
+//
+//    int updateByExample(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
+//
+//    int updateByPrimaryKeyWithBLOBs(ContentEntity record);
 
 //    List<ArchiveBo> findReturnArchiveBo();
 
-    List<ContentEntity> findByCatalog(Integer mid);
+//    List<ContentEntity> findByCatalog(Integer mid);
 }

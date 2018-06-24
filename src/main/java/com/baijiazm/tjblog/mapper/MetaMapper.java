@@ -1,10 +1,7 @@
 package com.baijiazm.tjblog.mapper;
 
 import com.baijiazm.tjblog.model.entity.MetaEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,13 +40,28 @@ public interface MetaMapper {
     @Select(getMetasByTypeOrder)
     List<MetaEntity> getMetasByTypeOrder(@Param("type") String type,
                                          @Param("order") String order);
-    
+
 
     String selectMetasByNameType = "select * from t_meta where name=#{name} and type=#{type}";
 
     @Select(selectMetasByNameType)
     List<MetaEntity> selectMetasByNameType(@Param("name") String name,
                                            @Param("type") String type);
+
+
+    String selectByTypeOrderLimit = "select * from t_meta where type=#{type} order by #{order}, limit #{limit}";
+
+    @Select(selectByTypeOrderLimit)
+    List<MetaEntity> selectByTypeOrderLimit(@Param("type") String type,
+                                            @Param("order") String order,
+                                            @Param("limit") int limit);
+
+
+    String selectByPrimaryKey = "select * from t_meta where id=#{id}";
+
+    @Select(selectByPrimaryKey)
+    MetaEntity selectByPrimaryKey(@Param("id") Integer id);
+
 
     String insertOneMeta = "insert into t_meta ( " +
             " `id`, `name`, `slug`, `type`, `description`, `sort`, `parent`) " +
@@ -60,4 +72,10 @@ public interface MetaMapper {
     @Insert(insertOneMeta)
     @Options(useGeneratedKeys = true, keyProperty = "meta.id")
     void insertOneMeta(@Param("meta") MetaEntity meta);
+
+
+    String deleteById = "delete from t_meta where id=#{id}";
+
+    @Delete(deleteById)
+    void deleteById(@Param("id") Integer id);
 }

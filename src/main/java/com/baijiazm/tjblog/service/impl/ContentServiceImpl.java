@@ -130,9 +130,16 @@ public class ContentServiceImpl implements IContentService {
     }
 
     @Override
-    public void updateContentByCid(ContentEntity ContentEntity) {
-        if (null != ContentEntity && null != ContentEntity.getId()) {
-            contentMapper.updateByPrimaryKeySelective(ContentEntity);
+    public void updateCommentsNumberById(ContentEntity contentEntity) {
+        if (null != contentEntity && null != contentEntity.getId()) {
+            contentMapper.updateCommentsNumberById(contentEntity);
+        }
+    }
+
+    @Override
+    public void updateHitsByCid(ContentEntity contentEntity) {
+        if (null != contentEntity && null != contentEntity.getId()) {
+            contentMapper.updateHitsById(contentEntity);
         }
     }
 

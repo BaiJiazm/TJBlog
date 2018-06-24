@@ -70,30 +70,7 @@
                             </tbody>
                         </table>
 
-                        <!--<div th:fragment="pageAdminNav(pageInfo)" class="clearfix">-->
-                        <!--<nav aria-label="Page navigation pull-right">-->
-                        <!--<ul class="pagination">-->
-                        <!--<li th:if="${pageInfo.hasPreviousPage}">-->
-                        <!--<a th:href="@{'?page='+${pageInfo.prePage}}" aria-label="Previous">-->
-                        <!--<i class="fa fa-angle-left"></i>&nbsp;上一页-->
-                        <!--</a>-->
-                        <!--</li>-->
-
-                        <!--<th:block th:each="nav : ${pageInfo.navigatepageNums}">-->
-                        <!--<li th:class="${nav==pageInfo.pageNum}?'active':''"><a-->
-                        <!--th:href="@{'?page='+${nav}}" th:text="${nav}"></a>-->
-                        <!--</li>-->
-                        <!--</th:block>-->
-
-                        <!--<li th:if="${pageInfo.hasNextPage}">-->
-                        <!--<a th:href="@{'?page='+${pageInfo.nextPage}}" aria-label="Next">-->
-                        <!--下一页&nbsp;<i class="fa fa-angle-right"></i>-->
-                        <!--</a>-->
-                        <!--</li>-->
-                        <!--<li><span th:text="'共'+${pageInfo.pages}+'页'">共5页</span></li>-->
-                        <!--</ul>-->
-                        <!--</nav>-->
-                        <!--</div>-->
+                        <div th:replace="common/macros :: pageAdminNav(${articles})"></div>
                     </div>
                 </div>
 

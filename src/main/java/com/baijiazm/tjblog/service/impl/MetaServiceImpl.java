@@ -6,8 +6,10 @@ import com.baijiazm.tjblog.mapper.MetaMapper;
 import com.baijiazm.tjblog.model.entity.ContentEntity;
 import com.baijiazm.tjblog.model.entity.MetaEntity;
 import com.baijiazm.tjblog.model.entity.RelationshipEntity;
+import com.baijiazm.tjblog.service.IContentService;
 import com.baijiazm.tjblog.service.IMetaService;
 import com.baijiazm.tjblog.service.IRelationshipService;
+import com.baijiazm.tjblog.webConst.WebConst;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.util.StringUtil;
@@ -31,6 +33,9 @@ public class MetaServiceImpl implements IMetaService {
 
     @Autowired
     IRelationshipService relationshipService;
+
+    @Autowired
+    IContentService contentService;
 
     @Override
     public List<MetaEntity> getMetasByType(String type) {
@@ -92,81 +97,71 @@ public class MetaServiceImpl implements IMetaService {
         return null;
     }
 
-//    @Override
-//    public List<MetaDto> getMetaList(String type, String orderby, int limit) {
-//        if (StringUtils.isNotBlank(type)) {
-//            if (StringUtils.isBlank(orderby)) {
-//                orderby = "count desc, a.mid desc";
-//            }
-//            if (limit < 1 || limit > WebConst.MAX_POSTS) {
-//                limit = 10;
-//            }
-//            Map<String, Object> paraMap = new HashMap<>();
-//            paraMap.put("type", type);
-//            paraMap.put("order", orderby);
-//            paraMap.put("limit", limit);
-//            return metaMapper.selectFromSql(paraMap);
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void delete(int mid) {
-//        MetaEntity metas = metaMapper.selectByPrimaryKey(mid);
-//        if (null != metas) {
-//            String type = metas.getType();
-//            String name = metas.getName();
-//
-//            metaMapper.deleteByPrimaryKey(mid);
-//
-//            List<RelationshipVoKey> rlist = relationshipService.getRelationshipById(null, mid);
-//            if (null != rlist) {
-//                for (RelationshipVoKey r : rlist) {
-//                    ContentEntity contents = contentService.getContents(String.valueOf(r.getCid()));
-//                    if (null != contents) {
-//                        ContentEntity temp = new ContentEntity();
-//                        temp.setCid(r.getCid());
-//                        if (type.equals(Types.CATEGORY.getType())) {
-//                            temp.setCategories(reMeta(name, contents.getCategories()));
-//                        }
-//                        if (type.equals(Types.TAG.getType())) {
-//                            temp.setTags(reMeta(name, contents.getTags()));
-//                        }
-//                        contentService.updateContentByCid(temp);
-//                    }
-//                }
-//            }
-//            relationshipService.deleteById(null, mid);
-//        }
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void saveMeta(String type, String name, Integer mid) {
-//        if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
-//            MetaEntity MetaEntity = new MetaEntity();
-//            MetaEntity.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-//            List<MetaEntity> MetaEntitys = metaMapper.selectByExample(MetaEntity);
-//            MetaEntity metas;
-//            if (MetaEntitys.size() != 0) {
-//                throw new TipException("已经存在该项");
-//            } else {
-//                metas = new MetaEntity();
-//                metas.setName(name);
-//                if (null != mid) {
-//                    MetaEntity original = metaMapper.selectByPrimaryKey(mid);
-//                    metas.setMid(mid);
-//                    metaMapper.updateByPrimaryKeySelective(metas);
-////                    更新原有文章的categories
-//                    contentService.updateCategory(original.getName(), name);
-//                } else {
-//                    metas.setType(type);
-//                    metaMapper.insertSelective(metas);
-//                }
-//            }
-//        }
-//    }
+    @Override
+    public List<MetaEntity> getMetaList(String type, String orderby, int limit) {
+        if (StringUtils.isNotBlank(type)) {
+            if (StringUtils.isBlank(orderby)) {
+                orderby = "count desc, id desc";
+            }
+            if (limit < 1 || limit > WebConst.MAX_POSTS) {
+                limit = 10;
+            }
+            return metaMapper.selectByTypeOrderLimit(type, orderby, limit);
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public void delete(int mid) {
+        MetaEntity metas = metaMapper.selectByPrimaryKey(mid);
+        if (null != metas) {
+            String type = metas.getType();
+            String name = metas.getName();
+
+            metaMapper.deleteById(mid);
+
+            List<RelationshipEntity> rlist = relationshipService.getRelationshipById(null, mid);
+            if (null != rlist) {
+                for (RelationshipEntity r : rlist) {
+                    ContentEntity contents = contentService.getContents(String.valueOf(r.getContentId()));
+                    if (null != contents) {
+                        ContentEntity temp = new ContentEntity();
+                        temp.setId(r.getContentId());
+                        if (type.equals(Types.CATEGORY.getType())) {
+                            temp.setCategories(reMeta(name, contents.getCategories()));
+                            contentService.
+                        }
+                        if (type.equals(Types.TAG.getType())) {
+                            temp.setTags(reMeta(name, contents.getTags()));
+                        }
+                        contentService.updateContentByCid(temp);
+                    }
+                }
+            }
+            relationshipService.deleteById(null, mid);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void saveMeta(String type, String name, Integer mid) {
+        if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
+            MetaEntity MetaEntity = new MetaEntity();
+
+            List<MetaEntity> MetaEntitys = metaMapper.selectMetasByNameType(name, type);
+            MetaEntity metas;
+            if (MetaEntitys.size() != 0) {
+                throw new TipException("已经存在该项");
+            } else {
+                metas = new MetaEntity();
+                metas.setName(name);
+                metas.setType(type);
+                metaMapper.insertOneMeta(metas);
+            }
+        }
+    }
+
 //
 //    @Override
 //    @Transactional
@@ -181,21 +176,21 @@ public class MetaServiceImpl implements IMetaService {
 //            }
 //        }
 //    }
-//
-//    private String reMeta(String name, String metas) {
-//        String[] ms = StringUtils.split(metas, ",");
-//        StringBuilder sbuf = new StringBuilder();
-//        for (String m : ms) {
-//            if (!name.equals(m)) {
-//                sbuf.append(",").append(m);
-//            }
-//        }
-//        if (sbuf.length() > 0) {
-//            return sbuf.substring(1);
-//        }
-//        return "";
-//    }
-//
+
+    private String reMeta(String name, String metas) {
+        String[] ms = StringUtils.split(metas, ",");
+        StringBuilder sbuf = new StringBuilder();
+        for (String m : ms) {
+            if (!name.equals(m)) {
+                sbuf.append(",").append(m);
+            }
+        }
+        if (sbuf.length() > 0) {
+            return sbuf.substring(1);
+        }
+        return "";
+    }
+
 //    @Override
 //    @Transactional
 //    public void saveMeta(MetaEntity metas) {

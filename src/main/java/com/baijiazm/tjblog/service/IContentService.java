@@ -32,12 +32,13 @@ public interface IContentService {
     ContentEntity getContents(String id);
 
     /**
-     * 根据主键更新
+     * 根据主键更新点击次数
      *
      * @param contentEntity contentEntity
      */
-    void updateContentByCid(ContentEntity contentEntity);
+    void updateHitsByCid(ContentEntity contentEntity);
 
+    void updateCommentsNumberById(ContentEntity contentEntity);
 
 //    /**
 //     * 查询分类/标签下的文章归档

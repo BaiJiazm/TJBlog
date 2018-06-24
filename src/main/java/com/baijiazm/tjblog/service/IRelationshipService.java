@@ -2,6 +2,8 @@ package com.baijiazm.tjblog.service;
 
 import com.baijiazm.tjblog.model.entity.RelationshipEntity;
 
+import java.util.List;
+
 public interface IRelationshipService {
 
     /**
@@ -27,4 +29,13 @@ public interface IRelationshipService {
      * @param mid
      */
     void deleteById(Integer cid, Integer mid);
+
+    /**
+     * 根据id搜索
+     *
+     * @param cid
+     * @param mid
+     * @return
+     */
+    List<RelationshipEntity> getRelationshipById(Integer cid, Integer mid);
 }

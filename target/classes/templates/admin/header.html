@@ -31,8 +31,9 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li th:class="${active}=='Home' ? 'active' : ''"><a th:href="@{/}"><span
-                            class="glyphicon glyphicon-home"></span> Home</a></li>
+                    <li th:class="${active}=='Home' ? 'active' : ''">
+                        <a th:href="@{/}"><span class="glyphicon glyphicon-home"></span> Home</a>
+                    </li>
                     <!--<li th:class="${active}=='Admin' ? 'active' : ''"><a th:href="@{/admin/index}"><span-->
                     <!--class="glyphicon glyphicon-user"></span> Admin</a>-->
                     <!--<ul class="nav navbar-nav navbar-right pull-right">-->
@@ -40,8 +41,8 @@
                     <!--</li>-->
                     <li th:class="${active}=='Admin' ? 'active dropdown ' : ' dropdown'"
                         th:if="${loginStatus}=='notLogin'">
-                        <a href="#" class="dropdown-toggle profile" data-toggle="dropdown"
-                           aria-expanded="true"> Admin</a>
+                        <a href="#" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
+                            <span class="glyphicon glyphicon-user"></span> Admin</a>
                         <ul class="dropdown-menu">
                             <li><a th:href="@{/}"><i class="fa fa-eye" aria-hidden="true"></i>
                                 查看网站</a></li>
@@ -51,7 +52,7 @@
                     <li th:class="${active}=='Admin' ? 'active dropdown' : 'dropdown'"
                         th:if="${loginStatus}=='isLogin'">
                         <a href="#" class="dropdown-toggle profile" data-toggle="dropdown"
-                           aria-expanded="true">Admin</a>
+                           aria-expanded="true"><span class="glyphicon glyphicon-user"></span>Admin</a>
                         <ul class="dropdown-menu">
                             <li><a th:href="@{/admin/index}"><i class="fa fa-eye" aria-hidden="true"></i>
                                 查看网站</a></li>
@@ -77,28 +78,29 @@
                 <a th:href="@{/admin/index}"><i class="fa fa-dashboard" aria-hidden="true"></i><span> 站点信息 </span></a>
             </li>
             <li class="list-group-item list-group-item-success">
-                <a th:href="@{/admin/article/publish}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
+                <a th:href="@{/admin/article/publish}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 编辑文章 </span></a>
             </li>
             <li class="list-group-item list-group-item-success">
                 <a th:href="@{/admin/article}"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
             </li>
             <li class="list-group-item list-group-item-success">
-                <a hrep="#"><i class="fa fa-file-text" aria-hidden="true"></i><span> 页面管理 </span></a>
+                <a th:href="@{/admin/comment}"><i class="fa fa-comments" aria-hidden="true"></i><span> 评论管理 </span></a>
+            </li>
+            <!--<li class="list-group-item list-group-item-success">-->
+            <!--<a hrep="#"><i class="fa fa-file-text" aria-hidden="true"></i><span> 页面管理 </span></a>-->
+            <!--</li>-->
+            <li class="list-group-item list-group-item-success">
+                <a th:href="@{/admin/category}"><i class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
             </li>
             <li class="list-group-item list-group-item-success">
-                <a hrep="#"><i class="fa fa-comments" aria-hidden="true"></i><span> 评论管理 </span></a>
+                <a th:href="@{/admin/attach}">
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
             </li>
+            <!--<li class="list-group-item list-group-item-success">-->
+            <!--<a hrep="#"><i class="fa fa-link" aria-hidden="true"></i><span> 友链管理 </span></a>-->
+            <!--</li>-->
             <li class="list-group-item list-group-item-success">
-                <a hrep="#"><i class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
-            </li>
-            <li class="list-group-item list-group-item-success">
-                <a hrep="#"><i class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
-            </li>
-            <li class="list-group-item list-group-item-success">
-                <a hrep="#"><i class="fa fa-link" aria-hidden="true"></i><span> 友链管理 </span></a>
-            </li>
-            <li class="list-group-item list-group-item-success">
-                <a hrep="#"><i class="fa fa-gear" aria-hidden="true"></i><span> 系统设置 </span></a>
+                <a th:href="@{/admin/setting}"><i class="fa fa-gear" aria-hidden="true"></i><span> 系统设置 </span></a>
             </li>
         </ul>
     </div>

@@ -213,13 +213,13 @@ public class IndexController extends BaseController {
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
-                return errorHint(modelMap, result, this.render("post") + cid);
+                return errorHint(modelMap, result, "/article/" + cid);
             }
-            return errorHint(modelMap, "您发表评论成功", this.render("post") + cid);
+            return errorHint(modelMap, "您发表评论成功，评论经过作者审核后可显示查看", "/article/" + cid);
         } catch (Exception e) {
             String msg = "评论发布失败";
             LOGGER.error(msg, e);
-            return errorHint(modelMap, msg, this.render("post") + cid);
+            return errorHint(modelMap, msg, "/article/" + cid);
         }
     }
 
@@ -338,7 +338,7 @@ public class IndexController extends BaseController {
             ContentEntity temp = new ContentEntity();
             temp.setId(cid);
             temp.setHits(chits + hits);
-            contentService.updateContentByCid(temp);
+            contentService.updateHitsByCid(temp);
             cache.hset("article", "hits", 1);
         } else {
             cache.hset("article", "hits", hits);
@@ -398,12 +398,6 @@ public class IndexController extends BaseController {
         cookie.setMaxAge(maxAge);
         cookie.setSecure(false);
         response.addCookie(cookie);
-    }
-
-    private String errorHint(ModelMap modelMap, String info, String backLink) {
-        modelMap.addAttribute("info", info);
-        modelMap.addAttribute("backLink", backLink);
-        return this.render("hintPage");
     }
 
 }

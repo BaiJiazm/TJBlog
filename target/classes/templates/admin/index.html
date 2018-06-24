@@ -20,7 +20,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"
@@ -33,7 +33,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                 <span class="glyphicon glyphicon-comment" aria-hidden="true"
@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                 <span class="glyphicon glyphicon-upload" aria-hidden="true"
@@ -59,19 +59,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                <span class="glyphicon glyphicon-link" aria-hidden="true"
-                                      style="font-size: 25px"></span>
-                                    </div>
-                                    <div class="panel-body text-right" style="font-size: 16px">
-                                        <p>友链了</p>
-                                        <p class="text-info" th:text="${statistics.links}">links</p>
-                                        <p>个好友</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--<div class="col-md-3">-->
+                            <!--<div class="panel panel-default">-->
+                            <!--<div class="panel-heading">-->
+                            <!--<span class="glyphicon glyphicon-link" aria-hidden="true"-->
+                            <!--style="font-size: 25px"></span>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body text-right" style="font-size: 16px">-->
+                            <!--<p>友链了</p>-->
+                            <!--<p class="text-info" th:text="${statistics.links}">links</p>-->
+                            <!--<p>个好友</p>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
                         </div>
 
                         <div class="row">
@@ -117,7 +117,7 @@
                                                 于
                                                 <th:block th:text="${commons.fmtdate(comment.created,'MM月dd日HH:mm')}"/>
                                                 ：<a
-                                                    th:href="${commons.site_url('/article/')}+${comment.id}+'#comments'"
+                                                    th:href="${commons.site_url('/article/')}+${comment.contentId}+'#comments'"
                                                     target="_blank" th:utext="${commons.article(comment.content)}"></a>
                                                 <!--<block>于MM月DD日HH:mm ：</block>-->
                                                 <!--<block><a href="#">commentContent</a></block>-->

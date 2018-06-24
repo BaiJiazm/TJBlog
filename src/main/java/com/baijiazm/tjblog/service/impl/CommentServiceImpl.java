@@ -52,19 +52,20 @@ public class CommentServiceImpl implements ICommentService {
         if (null == comments.getContentId()) {
             return "评论文章不能为空";
         }
-        ContentEntity contents = contentService.getContents(String.valueOf(comments.getContentId()));
+        ContentEntity contents = contentService.getContents(comments.getContentId().toString());
         if (null == contents) {
             return "不存在的文章";
         }
         comments.setOwnerId(contents.getAuthorId());
         comments.setStatus("not_audit");
         comments.setCreated(DateKit.getCurrentUnixTime());
-//        commentMapper.insertSelective(comments);
+        commentMapper.insertOneComment(comments);
 
         ContentEntity temp = new ContentEntity();
         temp.setId(contents.getId());
-//        temp.setCommentsNum(contents.getCommentsNum() + 1);
-//        contentService.updateContentByCid(temp);
+        Integer commentsNumber = contents.getCommentsNumber();
+        temp.setCommentsNumber(commentsNumber == null ? 1 : commentsNumber + 1);
+        contentService.updateCommentsNumberById(temp);
 
         return WebConst.SUCCESS_RESULT;
     }
@@ -73,64 +74,63 @@ public class CommentServiceImpl implements ICommentService {
     public PageInfo<CommentEntity> getComments(Integer cid, int page, int limit) {
         if (null != cid) {
             PageHelper.startPage(page, limit);
-            CommentEntity CommentEntity = new CommentEntity();
-//            CommentEntity.createCriteria().andCidEqualTo(cid).andParentEqualTo(0).andStatusIsNotNull().andStatusEqualTo("approved");
-//            CommentEntity.setOrderByClause("coid desc");
-//            List<CommentEntity> parents = commentMapper.selectByExampleWithBLOBs(CommentEntity);
-//            PageInfo<CommentEntity> commentPaginator = new PageInfo<>(parents);
+            List<CommentEntity> parents = commentMapper.selectApprovedByCidOrderById(cid.toString());
+            PageInfo<CommentEntity> commentPaginator = new PageInfo<>(parents);
 //            PageInfo<CommentEntity> returnBo = copyPageInfo(commentPaginator);
 //            if (parents.size() != 0) {
 //                List<CommentEntity> comments = new ArrayList<>(parents.size());
 //                parents.forEach(parent -> {
-//                    CommentEntity comment = new CommentEntity(parent);
+//                    CommentEntity comment = new CommentEntity();
 //                    comments.add(comment);
 //                });
 //                returnBo.setList(comments);
 //            }
 //            return returnBo;
+            return commentPaginator;
         }
         return null;
     }
 
-//    @Override
-//    public PageInfo<CommentEntity> getCommentsWithPage(CommentEntity CommentEntity, int page, int limit) {
-//        PageHelper.startPage(page, limit);
-//        List<CommentEntity> CommentEntitys = commentMapper.selectByExampleWithBLOBs(CommentEntity);
-//        PageInfo<CommentEntity> pageInfo = new PageInfo<>(CommentEntitys);
-//        return pageInfo;
-//    }
+    @Override
+    public PageInfo<CommentEntity> getCommentsWithPage(String uid, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<CommentEntity> commentEntitys = commentMapper.selectByUidOrderById(uid);
+        PageInfo<CommentEntity> pageInfo = new PageInfo<>(commentEntitys);
+        return pageInfo;
+    }
 
-//    @Override
-//    @Transactional
-//    public void update(CommentEntity comments) {
-//        if (null != comments && null != comments.getCoid()) {
-//            commentMapper.updateByPrimaryKeyWithBLOBs(comments);
-//        }
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void delete(Integer coid, Integer cid) {
-//        if (null == coid) {
-//            throw new TipException("主键为空");
-//        }
-//        commentMapper.deleteByPrimaryKey(coid);
-//        ContentEntity contents = contentService.getContents(cid + "");
-//        if (null != contents && contents.getCommentsNum() > 0) {
-//            ContentEntity temp = new ContentEntity();
-//            temp.setContentId(cid);
-//            temp.setCommentsNum(contents.getCommentsNum() - 1);
-//            contentService.updateContentByCid(temp);
-//        }
-//    }
-//
-//    @Override
-//    public CommentEntity getCommentById(Integer coid) {
-//        if (null != coid) {
-//            return commentMapper.selectByPrimaryKey(coid);
-//        }
-//        return null;
-//    }
+    @Override
+    @Transactional
+    public void update(CommentEntity comments) {
+        if (null != comments && null != comments.getId()) {
+            commentMapper.updateStatus(comments);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void delete(Integer coid, Integer cid) {
+        if (null == coid) {
+            throw new TipException("主键为空");
+        }
+        commentMapper.deleteByPrimaryKey(coid);
+        ContentEntity contents = contentService.getContents(cid + "");
+        if (null != contents) {
+            ContentEntity temp = new ContentEntity();
+            temp.setId(cid);
+            Integer commentsNumber = contents.getCommentsNumber();
+            temp.setCommentsNumber(commentsNumber == null || commentsNumber <= 0 ? 0 : commentsNumber - 1);
+            contentService.updateCommentsNumberById(temp);
+        }
+    }
+
+    @Override
+    public CommentEntity getCommentById(Integer coid) {
+        if (null != coid) {
+            return commentMapper.selectByPrimaryKey(coid);
+        }
+        return null;
+    }
 
     /**
      * copy原有的分页信息，除数据

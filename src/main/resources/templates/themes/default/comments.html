@@ -40,8 +40,8 @@
             <div th:if="${comments}">
                 <ol class="comment-list">
                     <th:block th:each="comment :${comments.list}">
-                        <li th:id="'li-comment-'+${comment.coid}" class="comment-body comment-parent comment-odd">
-                            <div th:id="'comment-'+${comment.coid}">
+                        <li th:id="'li-comment-'+${comment.id}" class="comment-body comment-parent comment-odd">
+                            <div th:id="'comment-'+${comment.id}">
                                 <div class="comment-view" onclick="">
                                     <div class="comment-header">
                                         <!--设置get请求的参数-->
@@ -88,6 +88,5 @@
         </div>
     </div>
 </div>
-<div th:replace="common/tale_comment::tale_comment"></div>
 </body>
 </html>

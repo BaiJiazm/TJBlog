@@ -3,6 +3,7 @@ package com.baijiazm.tjblog.controller;
 import com.baijiazm.tjblog.model.entity.UserEntity;
 import com.baijiazm.tjblog.utils.MapCache;
 import com.baijiazm.tjblog.utils.MyUtils;
+import org.springframework.ui.ModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,5 +49,11 @@ public abstract class BaseController {
 
     public String render_404() {
         return "comm/error_404";
+    }
+
+    public String errorHint(ModelMap modelMap, String info, String backLink) {
+        modelMap.addAttribute("info", info);
+        modelMap.addAttribute("backLink", backLink);
+        return this.render("hintPage");
     }
 }

@@ -38,16 +38,8 @@ public class RelationshipServiceImpl implements IRelationshipService {
         }
     }
 
-//    @Override
-//    public List<RelationshipVoKey> getRelationshipById(Integer cid, Integer mid) {
-//        RelationshipVoExample relationshipVoExample = new RelationshipVoExample();
-//        RelationshipVoExample.Criteria criteria = relationshipVoExample.createCriteria();
-//        if (cid != null) {
-//            criteria.andCidEqualTo(cid);
-//        }
-//        if (mid != null) {
-//            criteria.andMidEqualTo(mid);
-//        }
-//        return relationshipVoMapper.selectByExample(relationshipVoExample);
-//    }
+    @Override
+    public List<RelationshipEntity> getRelationshipById(Integer cid, Integer mid) {
+        return relationshipMapper.selectByCidMid(cid, mid);
+    }
 }

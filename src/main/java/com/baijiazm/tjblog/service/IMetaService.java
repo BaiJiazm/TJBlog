@@ -11,22 +11,6 @@ public interface IMetaService {
     void saveMeta(Integer cid, String names, String types);
 
     /**
-     * 根据类型和名字查询项
-     *
-     * @param type
-     * @param name
-     * @return
-     */
-//    MetaDto getMeta(String type, String name);
-
-    /**
-     * 根据文章id获取项目个数
-     * @param mid
-     * @return
-     */
-//    Integer countMeta(Integer mid);
-
-    /**
      * 根据类型查询项目列表
      *
      * @param types
@@ -35,13 +19,14 @@ public interface IMetaService {
     List<MetaEntity> getMetas(String types);
 
 
-//    /**
-//     * 保存多个项目
-//     * @param cid
-//     * @param names
-//     * @param type
-//     */
-//    void saveMetas(Integer cid, String names, String type);
+    /**
+     * 保存多个项目
+     *
+     * @param cid
+     * @param names
+     * @param type
+     */
+    void saveMetas(Integer cid, String names, String type);
 
     /**
      * 保存项目
@@ -68,15 +53,4 @@ public interface IMetaService {
      */
     void delete(int mid);
 
-//    /**
-//     * 保存项目
-//     * @param metas
-//     */
-//    void saveMeta(MetaEntity metas);
-//
-//    /**
-//     * 更新项目
-//     * @param metas
-//     */
-//    void update(MetaEntity metas);
 }

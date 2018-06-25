@@ -27,11 +27,6 @@ public class CategoryController extends BaseController {
     private IMetaService metasService;
 
     @GetMapping(value = "")
-    public String setting(HttpServletRequest request, ModelMap modelMap) {
-        return errorHint(modelMap, "此功能区敬请期待", "/admin/index");
-    }
-
-    @GetMapping(value = "")
     public String index(HttpServletRequest request) {
         List<MetaEntity> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
         List<MetaEntity> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
@@ -51,15 +46,14 @@ public class CategoryController extends BaseController {
     }
 
     @RequestMapping(value = "delete")
-    @ResponseBody
-    public String delete(@RequestParam int mid) {
+    public String delete(@RequestParam int mid, ModelMap modelMap) {
         try {
             metasService.delete(mid);
         } catch (Exception e) {
             String msg = "删除失败";
             LOGGER.error(msg, e);
-            return String.fail(msg);
+            return errorHint(modelMap, msg, "/admin/category");
         }
-        return String.ok();
+        return errorHint(modelMap, "删除成功", "/admin/category");
     }
 }

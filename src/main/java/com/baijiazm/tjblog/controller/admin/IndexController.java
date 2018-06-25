@@ -27,6 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * 管理员首页对应控制器
+ */
 @Controller("adminIndexController")
 @RequestMapping("/admin")
 @Transactional(rollbackFor = TipException.class)
@@ -145,19 +148,22 @@ public class IndexController extends BaseController {
 
     /**
      * 获取请求绑定的登录对象
-     *
-     * @param request
-     * @return
      */
     public UserEntity user(HttpServletRequest request) {
         return MyUtils.getLoginUser(request);
     }
 
+    /**
+     * 获取请求绑定的登录ID
+     */
     public Integer getId(HttpServletRequest request) {
         return this.user(request).getId();
     }
 
+    /**
+     * 错误提示
+     */
     public String render_404() {
-        return "comm/error_404";
+        return "common/error_404";
     }
 }

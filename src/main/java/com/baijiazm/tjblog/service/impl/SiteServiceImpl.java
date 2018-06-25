@@ -94,7 +94,6 @@ public class SiteServiceImpl implements ISiteService {
             limit = 10;
         }
 
-        //下一行作用暂不明
 //        PageHelper.startPage((page - 1) * limit, limit);
         List<LogEntity> logEntities = logMapper.selectLogsOffsetLimit(0, limit);
         return logEntities;

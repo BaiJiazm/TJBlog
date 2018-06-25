@@ -110,12 +110,13 @@ public class ContentServiceImpl implements IContentService {
     public ContentEntity getContents(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                ContentEntity ContentEntity = contentMapper.selectByPrimaryKey(Integer.valueOf(id));
-                if (ContentEntity != null) {
-                    ContentEntity.setHits(ContentEntity.getHits() + 1);
-                    contentMapper.updateByPrimaryKey(ContentEntity);
+                ContentEntity contentEntity = contentMapper.selectByPrimaryKey(Integer.valueOf(id));
+                if (contentEntity != null) {
+                    Integer hits = contentEntity.getHits();
+                    contentEntity.setHits(hits == null ? 0 : hits + 1);
+                    contentMapper.updateHitsById(contentEntity);
                 }
-                return ContentEntity;
+                return contentEntity;
             } else {
                 ContentEntity contentEntity = new ContentEntity();
                 contentEntity.setSlug(id);
@@ -143,36 +144,13 @@ public class ContentServiceImpl implements IContentService {
         }
     }
 
-    //    @Override
-//    public PageInfo<ContentEntity> getArticles(Integer mid, int page, int limit) {
-//        int total = metaService.countWithSql(mid);
-//        PageHelper.startPage(page, limit);
-//        List<ContentEntity> list = contentMapper.findByCatalog(mid);
-//        PageInfo<ContentEntity> paginator = new PageInfo<>(list);
-//        paginator.setTotal(total);
-//        return paginator;
-//    }
-//
-//    @Override
-//    public PageInfo<ContentEntity> getArticles(String keyword, Integer page, Integer limit) {
-//        PageHelper.startPage(page, limit);
-//        ContentEntity ContentEntity = new ContentEntity();
-//        ContentEntity.Criteria criteria = ContentEntity.createCriteria();
-//        criteria.andTypeEqualTo(Types.ARTICLE.getType());
-//        criteria.andStatusEqualTo(Types.PUBLISH.getType());
-//        criteria.andTitleLike("%" + keyword + "%");
-//        ContentEntity.setOrderByClause("created desc");
-//        List<ContentEntity> ContentEntitys = contentMapper.selectByExampleWithBLOBs(ContentEntity);
-//        return new PageInfo<>(ContentEntitys);
-//    }
-//
-//    @Override
-//    public PageInfo<ContentEntity> getArticlesWithpage(ContentEntity commentVoExample, Integer page, Integer limit) {
-//        PageHelper.startPage(page, limit);
-//        List<ContentEntity> ContentEntitys = contentMapper.selectByExampleWithBLOBs(commentVoExample);
-//        return new PageInfo<>(ContentEntitys);
-//    }
-//
+    @Override
+    public void updateCategoriesByCid(ContentEntity contentEntity) {
+        if (null != contentEntity && null != contentEntity.getId()) {
+            contentMapper.updateCategoriesByCid(contentEntity);
+        }
+    }
+
     @Override
     @Transactional
     public String deleteByCid(Integer cid) {
@@ -184,51 +162,42 @@ public class ContentServiceImpl implements IContentService {
         }
         return "数据为空";
     }
-//
-//    @Override
-//    public void updateCategory(String ordinal, String newCatefory) {
-//        ContentEntity ContentEntity = new ContentEntity();
-//        ContentEntity.setCategories(newCatefory);
-//        ContentEntity example = new ContentEntity();
-//        example.createCriteria().andCategoriesEqualTo(ordinal);
-//        contentMapper.updateByExampleSelective(ContentEntity, example);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public String updateArticle(ContentEntity contents) {
-//        if (null == contents) {
-//            return "文章对象为空";
-//        }
-//        if (StringUtils.isBlank(contents.getTitle())) {
-//            return "文章标题不能为空";
-//        }
-//        if (StringUtils.isBlank(contents.getContent())) {
-//            return "文章内容不能为空";
-//        }
-//        int titleLength = contents.getTitle().length();
-//        if (titleLength > WebConst.MAX_TITLE_COUNT) {
-//            return "文章标题过长";
-//        }
-//        int contentLength = contents.getContent().length();
-//        if (contentLength > WebConst.MAX_TEXT_COUNT) {
-//            return "文章内容过长";
-//        }
-//        if (null == contents.getAuthorId()) {
-//            return "请登录后发布文章";
-//        }
-//        if (StringUtils.isBlank(contents.getSlug())) {
-//            contents.setSlug(null);
-//        }
-//        int time = DateKit.getCurrentUnixTime();
-//        contents.setModified(time);
-//        Integer cid = contents.getId();
-//        contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
-//
-//        contentMapper.updateByPrimaryKeySelective(contents);
-//        relationshipService.deleteById(cid, null);
-//        metasService.saveMetas(cid, contents.getTags(), Types.TAG.getType());
-//        metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY.getType());
-//        return WebConst.SUCCESS_RESULT;
-//    }
+
+    @Override
+    @Transactional
+    public String updateArticle(ContentEntity contents) {
+        if (null == contents) {
+            return "文章对象为空";
+        }
+        if (StringUtils.isBlank(contents.getTitle())) {
+            return "文章标题不能为空";
+        }
+        if (StringUtils.isBlank(contents.getContent())) {
+            return "文章内容不能为空";
+        }
+        int titleLength = contents.getTitle().length();
+        if (titleLength > WebConst.MAX_TITLE_COUNT) {
+            return "文章标题过长";
+        }
+        int contentLength = contents.getContent().length();
+        if (contentLength > WebConst.MAX_TEXT_COUNT) {
+            return "文章内容过长";
+        }
+        if (null == contents.getAuthorId()) {
+            return "请登录后发布文章";
+        }
+        if (StringUtils.isBlank(contents.getSlug())) {
+            contents.setSlug(null);
+        }
+        int time = DateKit.getCurrentUnixTime();
+        contents.setModified(time);
+        Integer cid = contents.getId();
+        contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
+
+        contentMapper.updateByPrimaryKey(contents);
+        relationshipService.deleteById(cid, null);
+        metaService.saveMetas(cid, contents.getTags(), Types.TAG.getType());
+        metaService.saveMetas(cid, contents.getCategories(), Types.CATEGORY.getType());
+        return WebConst.SUCCESS_RESULT;
+    }
 }

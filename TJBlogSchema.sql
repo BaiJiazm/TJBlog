@@ -1,4 +1,3 @@
-
 DROP database IF EXISTS DBTJBlog;
 
 CREATE database DBTJBlog DEFAULT character set utf8 collate utf8_general_ci;
@@ -83,8 +82,8 @@ LOCK TABLES `t_content` WRITE;
 
 INSERT INTO `t_content` (`id`, `title`, `slug`, `created`, `modified`, `content`, `author_id`, `type`, `status`, `tags`, `categories`, `hits`, `comments_number`, `allow_comment`, `allow_ping`, `allow_feed`)
 VALUES
-	(1,'about my blog','about',1487853610,1487872488,'### Hello World\r\n\r\nabout me\r\n\r\n### ...\r\n\r\n...',1,'page','publish',NULL,NULL,0,0,1,1,1),
-	(2,'Hello My Blog',NULL,1487861184,1487872798,'## Hello  World.\r\n\r\n> ...\r\n\r\n----------\r\n\r\n\r\n<!--more-->\r\n\r\n```java\r\npublic static void main(String[] args){\r\n    System.out.println(\"Hello 13 Blog.\");\r\n}\r\n```',1,'post','publish','','default',10,0,1,1,1);
+	(1,'About TJ Blog','about',1497853610,1497872488,'### Hello World\r\n\r\nabout me\r\n\r\n### ...\r\n\r\n...',1,'page','publish',NULL,NULL,0,0,1,1,1),
+	(2,'Hello TJ Blog',NULL,1497861184,1497872798,'## Hello  World.\r\n\r\n> ...\r\n\r\n----------\r\n\r\n\r\n<!--more-->\r\n\r\n```java\r\npublic static void main(String[] args){\r\n    System.out.println(\"Hello 13 Blog.\");\r\n}\r\n```',1,'post','publish','','default',10,0,1,1,1);
 
 UNLOCK TABLES;
 
@@ -126,7 +125,7 @@ LOCK TABLES `t_option` WRITE;
 
 INSERT INTO `t_option` (`name`, `value`, `description`)
 VALUES
-	('site_title','My Blog',''),
+	('site_title','TJ Blog',''),
 	('social_weibo','',NULL),
 	('social_zhihu','',NULL),
 	('social_github','',NULL),
@@ -134,7 +133,7 @@ VALUES
 	('site_theme','default',NULL),
 	('site_keywords','13 Blog',NULL),
 	('site_description','13 Blog',NULL),
-	('site_record','','备案号');
+	('site_record','','recored_no');
 
 UNLOCK TABLES;
 

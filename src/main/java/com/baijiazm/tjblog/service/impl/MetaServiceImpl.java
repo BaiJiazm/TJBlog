@@ -10,19 +10,14 @@ import com.baijiazm.tjblog.service.IContentService;
 import com.baijiazm.tjblog.service.IMetaService;
 import com.baijiazm.tjblog.service.IRelationshipService;
 import com.baijiazm.tjblog.webConst.WebConst;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.groovy.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.parser.Entity;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MetaServiceImpl implements IMetaService {
@@ -130,12 +125,8 @@ public class MetaServiceImpl implements IMetaService {
                         temp.setId(r.getContentId());
                         if (type.equals(Types.CATEGORY.getType())) {
                             temp.setCategories(reMeta(name, contents.getCategories()));
-                            contentService.
+                            contentService.updateCategoriesByCid(temp);
                         }
-                        if (type.equals(Types.TAG.getType())) {
-                            temp.setTags(reMeta(name, contents.getTags()));
-                        }
-                        contentService.updateContentByCid(temp);
                     }
                 }
             }
@@ -147,13 +138,11 @@ public class MetaServiceImpl implements IMetaService {
     @Transactional
     public void saveMeta(String type, String name, Integer mid) {
         if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
-            MetaEntity MetaEntity = new MetaEntity();
-
             List<MetaEntity> MetaEntitys = metaMapper.selectMetasByNameType(name, type);
-            MetaEntity metas;
             if (MetaEntitys.size() != 0) {
                 throw new TipException("已经存在该项");
             } else {
+                MetaEntity metas;
                 metas = new MetaEntity();
                 metas.setName(name);
                 metas.setType(type);
@@ -162,20 +151,20 @@ public class MetaServiceImpl implements IMetaService {
         }
     }
 
-//
-//    @Override
-//    @Transactional
-//    public void saveMetas(Integer cid, String names, String type) {
-//        if (null == cid) {
-//            throw new TipException("项目关联id不能为空");
-//        }
-//        if (StringUtils.isNotBlank(names) && StringUtils.isNotBlank(type)) {
-//            String[] nameArr = StringUtils.split(names, ",");
-//            for (String name : nameArr) {
-//                this.saveOrUpdate(cid, name, type);
-//            }
-//        }
-//    }
+
+    @Override
+    @Transactional
+    public void saveMetas(Integer cid, String names, String type) {
+        if (null == cid) {
+            throw new TipException("项目关联id不能为空");
+        }
+        if (StringUtils.isNotBlank(names) && StringUtils.isNotBlank(type)) {
+            String[] nameArr = StringUtils.split(names, ",");
+            for (String name : nameArr) {
+                this.saveOrUpdate(cid, name, type);
+            }
+        }
+    }
 
     private String reMeta(String name, String metas) {
         String[] ms = StringUtils.split(metas, ",");
@@ -191,19 +180,4 @@ public class MetaServiceImpl implements IMetaService {
         return "";
     }
 
-//    @Override
-//    @Transactional
-//    public void saveMeta(MetaEntity metas) {
-//        if (null != metas) {
-//            metaMapper.insertSelective(metas);
-//        }
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void update(MetaEntity metas) {
-//        if (null != metas && null != metas.getMid()) {
-//            metaMapper.updateByPrimaryKeySelective(metas);
-//        }
-//    }
 }

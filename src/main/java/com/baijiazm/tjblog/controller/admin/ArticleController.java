@@ -74,6 +74,18 @@ public class ArticleController extends BaseController {
         return "redirect:/admin/article";
     }
 
+    @PostMapping(value = "/modify")
+    public String modifyArticle(ContentEntity contents, HttpServletRequest request, ModelMap modelMap) {
+        UserEntity users = this.user(request);
+        contents.setAuthorId(users.getId());
+        contents.setType(Types.ARTICLE.getType());
+        String result = contentsService.updateArticle(contents);
+        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+            return errorHint(modelMap, "保存文章草稿成功", "/admin/article");
+        }
+        return errorHint(modelMap, result, "/admin/article");
+    }
+
     @GetMapping(value = "/{cid}")
     public String editArticle(@PathVariable String cid, HttpServletRequest request) {
         ContentEntity contents = contentsService.getContents(cid);

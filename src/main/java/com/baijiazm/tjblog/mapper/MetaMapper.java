@@ -49,7 +49,7 @@ public interface MetaMapper {
                                            @Param("type") String type);
 
 
-    String selectByTypeOrderLimit = "select * from t_meta where type=#{type} order by #{order}, limit #{limit}";
+    String selectByTypeOrderLimit = "select * from t_meta where type=#{type} order by #{order} limit #{limit}";
 
     @Select(selectByTypeOrderLimit)
     List<MetaEntity> selectByTypeOrderLimit(@Param("type") String type,

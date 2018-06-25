@@ -22,6 +22,9 @@ import java.util.List;
 //        UNIQUE KEY `mail` (`email`)
 //        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/**
+ * 管理员对应数据库操作
+ */
 @Component
 public interface UserMapper {
 

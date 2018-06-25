@@ -17,6 +17,9 @@ import sun.rmi.server.InactiveGroupException;
 
 import java.util.List;
 
+/**
+ * 管理员相关业务逻辑
+ */
 @Service("userService")
 public class UserServiceImpl implements IUserService {
 

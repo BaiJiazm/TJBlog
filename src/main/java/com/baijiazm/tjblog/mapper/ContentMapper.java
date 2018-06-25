@@ -9,22 +9,6 @@ import java.util.List;
 @Component
 public interface ContentMapper {
 
-    String selectContentsByTypeOrderLimitBegin = "select * from t_content where type=#{type}" +
-            " order by #{order} offset #{offset} limit 15";
-
-    @Select(selectContentsByTypeOrderLimitBegin)
-    @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "authorId", column = "author_id"),
-            @Result(property = "allowComment", column = "allow_comment"),
-            @Result(property = "allowPing", column = "allow_ping"),
-            @Result(property = "allowFeed", column = "allow_feed")
-    })
-    List<ContentEntity> selectContentsByTypeOrderLimitBegin(@Param("type") String type,
-                                                            @Param("order") String order,
-                                                            @Param("offset") int offset);
-
-
     String selectContentsByTypeOrderLimitBegin1 = "select * from t_content where type=#{type}" +
             " order by #{order} limit #{limit} offset #{offset}";
 
@@ -140,27 +124,11 @@ public interface ContentMapper {
     @Update(updateHitsById)
     int updateHitsById(@Param("content") ContentEntity content);
 
-//    long countByExample(ContentEntity example);
-//
-//    int deleteByExample(ContentEntity example);
-//
-//    int insert(ContentEntity record);
-//
-//    int insertSelective(ContentEntity record);
-//
-//    List<ContentEntity> selectByExampleWithBLOBs(ContentEntity example);
-//
-//    List<ContentEntity> selectByExample(ContentEntity example);
-//
-//    int updateByExampleSelective(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
-//
-//    int updateByExampleWithBLOBs(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
-//
-//    int updateByExample(@Param("record") ContentEntity record, @Param("example") ContentEntity example);
-//
-//    int updateByPrimaryKeyWithBLOBs(ContentEntity record);
 
-//    List<ArchiveBo> findReturnArchiveBo();
+    String updateCategoriesByCid = "update t_content set `categories`=#{content.categories} " +
+            " where id=#{content.id}";
 
-//    List<ContentEntity> findByCatalog(Integer mid);
+    @Update(updateCategoriesByCid)
+    int updateCategoriesByCid(@Param("content") ContentEntity content);
+
 }

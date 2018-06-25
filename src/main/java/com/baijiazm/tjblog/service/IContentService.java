@@ -40,52 +40,20 @@ public interface IContentService {
 
     void updateCommentsNumberById(ContentEntity contentEntity);
 
-//    /**
-//     * 查询分类/标签下的文章归档
-//     * @param mid mid
-//     * @param page page
-//     * @param limit limit
-//     * @return ContentEntity
-//     */
-//    PageInfo<ContentEntity> getArticles(Integer mid, int page, int limit);
-//
-//    /**
-//     * 搜索、分页
-//     * @param keyword keyword
-//     * @param page page
-//     * @param limit limit
-//     * @return ContentEntity
-//     */
-//    PageInfo<ContentEntity> getArticles(String keyword,Integer page,Integer limit);
-//
-//
-//    /**
-//     * @param commentVoExample
-//     * @param page
-//     * @param limit
-//     * @return
-//     */
-//    PageInfo<ContentEntity> getArticlesWithpage(ContentEntity commentVoExample, Integer page, Integer limit);
+    void updateCategoriesByCid(ContentEntity contentEntity);
 
     /**
-     * //     * 根据文章id删除
-     * //     * @param cid
-     * //
+     * 根据文章id删除
+     *
+     * @param cid
      */
     String deleteByCid(Integer cid);
 
-//
-//    /**
-//     * 编辑文章
-//     * @param contents
-//     */
-//    String updateArticle(ContentEntity contents);
-//
-//
-//    /**
-//     * 更新原有文章的category
-//     * @param ordinal
-//     * @param newCatefory
-//     */
-//    void updateCategory(String ordinal,String newCatefory);
+
+    /**
+     * 编辑文章
+     *
+     * @param contents
+     */
+    String updateArticle(ContentEntity contents);
 }

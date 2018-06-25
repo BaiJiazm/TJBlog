@@ -400,4 +400,10 @@ public class IndexController extends BaseController {
         response.addCookie(cookie);
     }
 
+    /**
+     * 错误提示
+     */
+    public String render_404() {
+        return "common/error_404";
+    }
 }
